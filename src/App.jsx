@@ -99,10 +99,10 @@ function App() {
 
     try {
       const response = await axios.post(
-        "https://3.27.181.193:5000/predict",
+        "https://3.27.181.193/predict",
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          timeout: 120000,
         }
       );
       setPrediction(response.data);
