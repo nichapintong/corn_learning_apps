@@ -99,7 +99,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        "http://3.27.181.193:5000/predict",
+        "https://3.27.181.193:5000/predict",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
