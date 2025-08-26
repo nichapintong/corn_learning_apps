@@ -99,12 +99,13 @@ function App() {
 
     try {
       const response = await axios.post(
-        "https://3.27.181.193/predict",
+        "https://api.3.27.181.193.sslip.io/predict",
         formData,
         {
           timeout: 120000,
         }
       );
+      console.log("test_26082025_2");
       setPrediction(response.data);
       setTop3Predic(response.data.slice(0, 3));
     } catch (error) {
