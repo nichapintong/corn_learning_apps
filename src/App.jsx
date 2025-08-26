@@ -94,18 +94,17 @@ function App() {
       return;
     }
 
+    console.log("test_26082025_3");
+
     const formData = new FormData();
     formData.append("image", imageData);
 
     try {
       const response = await axios.post(
         "https://api.3.27.181.193.sslip.io/predict",
-        formData,
-        {
-          timeout: 120000,
-        }
-      );
-      console.log("test_26082025_2");
+        formData
+      ); 
+      
       setPrediction(response.data);
       setTop3Predic(response.data.slice(0, 3));
     } catch (error) {
