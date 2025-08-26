@@ -83,33 +83,25 @@ function App() {
   };
 
   const handleOnChange = async ({ file, fileList }) => {
-    setImageLink(URL.createObjectURL(file));
+    const raw = file.originFileObj || file;
+    setImageLink(URL.createObjectURL(raw));
     setFileList(fileList);
-    await handleUpload(file);
+    await handleUpload(raw);
   };
 
-  const handleUpload = async (imageData) => {
-    if (!imageData) {
-      alert("Please select an image first.");
-      return;
-    }
+  const handleUpload = async (rawFile) => {
+    console.log("test_4")
+    const fd = new FormData();
+    fd.append("image", rawFile, rawFile.name); // include filename
 
-    console.log("test_26082025_3");
+    const res = await axios.post(
+      "https://api.3.27.181.193.sslip.io/predict",
+      fd,
+      { timeout: 120000 } // don't set Content-Type; let browser add boundary
+    );
 
-    const formData = new FormData();
-    formData.append("image", imageData);
-
-    try {
-      const response = await axios.post(
-        "https://api.3.27.181.193.sslip.io/predict",
-        formData
-      ); 
-      
-      setPrediction(response.data);
-      setTop3Predic(response.data.slice(0, 3));
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
+    setPrediction(res.data);
+    setTop3Predic(res.data.slice(0, 3));
   };
 
   const detailCornDisease = {
