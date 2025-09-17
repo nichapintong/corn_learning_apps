@@ -96,14 +96,14 @@ function App() {
 
       const res = await axios.post(
         // "http://127.0.0.1:5000/predict",
-        "https://api.3.27.202.55.sslip.io/predict",
+        "https://api.3.27.162.218.sslip.io/predict",
         fd,
         { timeout: 120000 }
       );
 
       setPrediction(res.data || []);
       setTop3Predic((res.data || []).slice(0, 3));
-    } catch (err) {
+    } catch (err) {  
       message.error("อัปโหลดไม่สำเร็จ");
       console.error(err);
     }
