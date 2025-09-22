@@ -96,7 +96,7 @@ function App() {
 
       const res = await axios.post(
         // "http://127.0.0.1:5000/predict",
-        "https://api.3.27.162.218.sslip.io/predict",
+        "https://api.3.106.224.235.sslip.io/predict",
         fd,
         { timeout: 120000 }
       );
