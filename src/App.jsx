@@ -208,8 +208,8 @@ function App() {
                     `,
                   }}
                 >
-                  Corn disease diagnosis system using deep learning and
-                  imageprocessing
+                  Corn Disease Diagnosis System Using Deep Learning and
+                  Image Processing
                 </p>
               </div>
             )}
