@@ -102,8 +102,8 @@ function App() {
       fd.append("image", rawFile, rawFile.name);
 
       const res = await axios.post(
-        "http://127.0.0.1:5000/predict",
-        // "https://api.52.63.135.197.sslip.io/predict",
+        // "http://127.0.0.1:5000/predict",
+        "https://api.3.107.174.93.sslip.io/predict",
         fd,
         { timeout: 120000 }
       );
