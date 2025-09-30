@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Upload, Button, message, Image } from "antd";
+import { Upload, Button, message, Image, Anchor, Col, Row } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { FiMenu } from "react-icons/fi";
 import axios from "axios";
-
 import icon from "./img/border_icon_rmuti.png";
 import "./App.css";
 
+import Corn_Brown_Spot from "../public/Corn_Brown_Spot.jpg";
+import Corn_Common_Rust from "../public/Corn_Common_Rust.jpg";
+import Corn_Downy_Mildew from "../public/Corn_Downy_Mildew.jpg";
+import Corn_Large_Leaf_Blight from "../public/Corn_Large_Leaf_Blight.jpg";
+import Corn_Leaf_Spot from "../public/Corn_Leaf_Spot.jpg";
+import Corn_SCMV_MDMV from "../public/Corn_SCMV_MDMV.jpg";
+import Corn_Small_Leaf_Blight from "../public/Corn_Small_Leaf_Blight.jpg";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -38,6 +44,8 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
+  // >>> เพิ่มเฉพาะสำหรับ content0 (ใช้เป็น container ให้ Anchor และสกรอลในกรอบ)
+  const content0Ref = useRef(null);
 
   useEffect(() => {
     if (fileList.length === 0) {
@@ -51,7 +59,6 @@ function App() {
     setNameDetail("");
     setNumDetail(null);
   }, [top3Predic]);
-
 
   // close dropdown on outside click
   useEffect(() => {
@@ -95,15 +102,15 @@ function App() {
       fd.append("image", rawFile, rawFile.name);
 
       const res = await axios.post(
-        // "http://127.0.0.1:5000/predict",
-        "https://api.52.63.135.197.sslip.io/predict",
+        "http://127.0.0.1:5000/predict",
+        // "https://api.52.63.135.197.sslip.io/predict",
         fd,
         { timeout: 120000 }
       );
 
       setPrediction(res.data || []);
       setTop3Predic((res.data || []).slice(0, 3));
-    } catch (err) {  
+    } catch (err) {
       message.error("อัปโหลดไม่สำเร็จ");
       console.error(err);
     }
@@ -208,8 +215,8 @@ function App() {
                     `,
                   }}
                 >
-                  Corn Disease Diagnosis System Using Deep Learning and
-                  Image Processing
+                  Corn Disease Diagnosis System Using Deep Learning and Image
+                  Processing
                 </p>
               </div>
             )}
@@ -223,7 +230,7 @@ function App() {
                 height: 30,
                 cursor: "pointer",
                 color: "#CC5500",
-                margin: 10
+                margin: 10,
               }}
               onClick={toggleMenu}
               aria-label="menu"
@@ -288,74 +295,304 @@ function App() {
       <div className="content">
         {/* content1 */}
         <div
-          className="content1"
-          style={
-            fileList.length >= 1 && width > 768
-              ? contentLayout
-              : width < 769
-              ? { ...contentresponsive, height: "100%" }
-              : contentTransparent
-          }
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            gap: "20px", // ระยะห่างระหว่าง content0 และ content1
+            padding: "20px",
+            flexDirection: width < 769 ? "column" : "row",
+          }}
         >
-          {fileList.length >= 1 ? (
+          {/* >>> ซ้าย (content0) — แก้เฉพาะส่วนนี้เท่านั้น <<< */}
+          {fileList.length === 0 && (
             <div
+              className="content0"
+              ref={content0Ref}
               style={{
-                display: "flex",
-                flexDirection: "column",
-                flexWrap: "wrap",
-                alignItems: "center",
-                alignContent: "center",
+                flex: 1,
+                background: "rgba(255,255,255,0.7)", // โปร่งใส
+                borderRadius: "20px",
+                padding: "20px",
+                minHeight: "400px",
+                maxHeight: "75vh", // จำกัดความสูงให้มีสกรอลภายใน
+                overflowY: "auto", // สกรอลเฉพาะ content0
+                scrollBehavior: "smooth", // เลื่อนนุ่มนวล
               }}
             >
-              <Image src={imageLink} width={"70%"} />
-              <br />
-              <Button
-                type="primary"
-                danger
-                block
-                className="custom-clear-button"
-                style={{ marginTop: 24, width: 100, border: "none" }}
-                onClick={() => {
-                  setFileList([]);
-                  setPrediction([]);
-                  setTop3Predic([]);
-                  setNameDetail(""); // ⬅️ เพิ่ม
-                  setNumDetail(null); // ⬅️ เพิ่ม
+              {/* หัวเรื่อง */}
+              <h2
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  marginBottom: 12,
+                  wordBreak: "break-word",
+                  overflowWrap: "anywhere",
+                  whiteSpace: "normal",
+                  color: "#5A3E1B",
                 }}
               >
-                ล้าง
-              </Button>
-            </div>
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Upload
-                beforeUpload={handleBeforeUpload}
-                onChange={handleOnChange}
-                fileList={fileList}
-                listType="picture-card"
-                style={{ width: "100%", height: "100%" }}
+                ข้อมูลโรคของข้าวโพด
+              </h2>
+
+              {/* โครงสองคอลัมน์ภายในกรอบ (ซ้าย = เนื้อหา, ขวา = เมนู Anchor) */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: width < 992 ? "1fr" : "1fr 230px",
+                  gap: 16,
+                  alignItems: "start",
+                }}
               >
-                <PlusOutlined /> Upload
-              </Upload>
-              <br />
-              <p
-                className="content21"
-                style={{ color: "red", marginTop: 10, textAlign: "center" }}
-              >
-                *คำแนะนำการอัปโหลดไฟล์ภาพ
-                <br />
-                1.อัปโหลดไฟล์ภาพนามสกุล JPG, JPEG หรือ PNG เท่านั้น
-                <br />
-                2.ขนาดไฟล์ไม่เกิน 10MB และความละเอียดไม่เกิน 1024*1024 พิกเซล
-              </p>
+                {/* ซ้าย: เนื้อหา 7 หัวข้อ + รูปตัวอย่างใต้ชื่อโรค */}
+                <div>
+                  {[
+                    {
+                      id: "sec-brown-spot",
+                      title: "โรคใบจุดสีน้ำตาล",
+                      image: Corn_Brown_Spot,
+                      cause: "เชื้อรา Physoderma maydis",
+                      symptom: "พบจุดสีน้ำตาลเข้มที่เส้นกลางใบ ใบอาจพับและไหม้",
+                    },
+                    {
+                      id: "sec-rust",
+                      title: "โรคราสนิม",
+                      image: Corn_Common_Rust,
+                      cause: "เชื้อรา Puccinia polysora",
+                      symptom:
+                        "เกิดตุ่มนูนของสปอร์สีน้ำตาลอ่อนบนใบทั้งด้านบนและล่าง หรือกาบใบ",
+                    },
+                    {
+                      id: "sec-downy",
+                      title: "โรคราน้ำค้าง",
+                      image: Corn_Downy_Mildew,
+                      cause: "เชื้อรา Peronosclerospora sorghi",
+                      symptom:
+                        "ใบมีลายสีเหลือง-เขียวอ่อน สลับสีเขียวแก่ เป็นทางยาว, มีผงเชื้อราสีขาวอมเทาที่ใต้ใบ, ต้นแคระแกร็น, ฝักขนาดเล็ก",
+                    },
+                    {
+                      id: "sec-leaf-spot",
+                      title: "โรคใบจุด",
+                      image: Corn_Leaf_Spot,
+                      cause: "เชื้อรา Bipolaris zeicola",
+                      symptom:
+                        "ใบมีจุดสีเหลืองและน้ำตาล หากปล่อยทิ้งไว้อาจกลายเป็นแผลไหม้",
+                    },
+                    {
+                      id: "sec-small-blight",
+                      title: "โรคใบไหม้แผลเล็ก",
+                      image: Corn_Small_Leaf_Blight,
+                      cause: "เชื้อรา Bipolaris maydis",
+                      symptom:
+                        "แผลขนาดเล็ก สีเหลืองอ่อนถึงสีเทา เกิดขึ้นบนใบก่อนจะขยายใหญ่ขึ้น",
+                    },
+                    {
+                      id: "sec-large-blight",
+                      title: "โรคใบไหม้แผลใหญ่",
+                      image: Corn_Large_Leaf_Blight,
+                      cause: "เชื้อรา Exserohilum turcicum (Bipolaris turcica)",
+                      symptom:
+                        "เกิดแผลขนาดใหญ่ สีเทาถึงสีน้ำตาลอ่อน ลุกลามตามแนวยาวของใบ จนใบแห้งตาย",
+                    },
+                    {
+                      id: "sec-mosaic",
+                      title: "โรคใบด่าง (ไวรัส SCMV&MDMV)",
+                      image: Corn_SCMV_MDMV,
+                      cause: "ไวรัส SCMV (Maize Dwarf Mosaic Virus)",
+                      symptom:
+                        "ใบข้าวโพดมีลายเขียวซีดสลับเข้ม, เป็นลายประจุดเหลือง, ยอดอ่อนสีเหลืองซีด, ต้นแคระแกร็น",
+                    },
+                  ].map((s, idx) => (
+                    <div
+                      key={s.id}
+                      id={s.id}
+                      style={{
+                        background: "rgba(0,0,0,0.035)",
+                        padding: 16,
+                        borderRadius: 12,
+                        marginTop: idx === 0 ? 0 : 12,
+                      }}
+                    >
+                      {/* ชื่อโรค */}
+                      <h4
+                        style={{
+                          margin: 0,
+                          wordBreak: "break-word",
+                          overflowWrap: "anywhere",
+                          whiteSpace: "normal",
+                        }}
+                      >
+                        {s.title}
+                      </h4>
+
+                      {/* รูปตัวอย่างใต้ชื่อโรค */}
+                      {s.image && (
+                        <img
+                          src={s.image}
+                          alt={s.title}
+                          style={{
+                            marginTop: 8,
+                            width: "70%",
+                            maxHeight: 170,
+                            objectFit: "cover",
+                            borderRadius: 8,
+                            display: "block",
+                          }}
+                          loading="lazy"
+                        />
+                      )}
+
+                      {/* สาเหตุ / อาการ */}
+                      <p
+                        style={{
+                          margin: "8px 0 0",
+                          wordBreak: "break-word",
+                          overflowWrap: "anywhere",
+                          whiteSpace: "normal",
+                        }}
+                      >
+                        <u>สาเหตุ:</u> {s.cause}
+                      </p>
+                      <p
+                        style={{
+                          margin: "4px 0 0",
+                          wordBreak: "break-word",
+                          overflowWrap: "anywhere",
+                          whiteSpace: "normal",
+                        }}
+                      >
+                        <u>อาการ:</u> {s.symptom}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* ขวา: เมนู Anchor (ยึดอยู่ด้านบนของกรอบนี้) */}
+                <div style={{ position: "sticky", top: 0 }}>
+                  <Anchor
+                    getContainer={() => content0Ref.current} // ให้เลื่อนภายใน content0
+                    targetOffset={8}
+                    items={[
+                      {
+                        key: "sec-brown-spot",
+                        href: "#sec-brown-spot",
+                        title: "โรคใบจุดสีน้ำตาล",
+                      },
+                      {
+                        key: "sec-rust",
+                        href: "#sec-rust",
+                        title: "โรคราสนิม",
+                      },
+                      {
+                        key: "sec-downy",
+                        href: "#sec-downy",
+                        title: "โรคราน้ำค้าง",
+                      },
+                      {
+                        key: "sec-leaf-spot",
+                        href: "#sec-leaf-spot",
+                        title: "โรคใบจุด",
+                      },
+                      {
+                        key: "sec-small-blight",
+                        href: "#sec-small-blight",
+                        title: "โรคใบไหม้แผลเล็ก",
+                      },
+                      {
+                        key: "sec-large-blight",
+                        href: "#sec-large-blight",
+                        title: "โรคใบไหม้แผลใหญ่",
+                      },
+                      {
+                        key: "sec-mosaic",
+                        href: "#sec-mosaic",
+                        title: "โรคใบด่าง (SCMV&MDMV)",
+                      },
+                    ]}
+                  />
+                </div>
+              </div>
             </div>
           )}
+
+          {/* >>> จบการแก้เฉพาะ content0 <<< */}
+
+          {/* 👉 ขวา (content1) */}
+          <div
+            className="content1"
+            style={{
+              flex: 1,
+              background: "rgba(255,255,255,0.7)",
+              borderRadius: "20px",
+              padding: "20px",
+              minHeight: "400px",
+              height: "75vh", // บังคับให้สูงเท่ากับ content0
+              boxSizing: "border-box",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {/* เนื้อหา content1 (อัปโหลดรูป) */}
+            {fileList.length >= 1 ? (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Image src={imageLink} width={"70%"} />
+                <br />
+                <Button
+                  type="primary"
+                  danger
+                  block
+                  className="custom-clear-button"
+                  style={{ marginTop: 24, width: 100, border: "none" }}
+                  onClick={() => {
+                    setFileList([]);
+                    setPrediction([]);
+                    setTop3Predic([]);
+                    setNameDetail("");
+                    setNumDetail(null);
+                  }}
+                >
+                  ล้าง
+                </Button>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Upload
+                  beforeUpload={handleBeforeUpload}
+                  onChange={handleOnChange}
+                  fileList={fileList}
+                  listType="picture-card"
+                  style={{ width: "100%", height: "100%" }}
+                >
+                  <PlusOutlined /> Upload
+                </Upload>
+                <br />
+                <p
+                  className="content21"
+                  style={{ color: "red", marginTop: 10, textAlign: "center" }}
+                >
+                  *คำแนะนำการอัปโหลดไฟล์ภาพ
+                  <br />
+                  1.อัปโหลดไฟล์ภาพนามสกุล JPG, JPEG หรือ PNG เท่านั้น
+                  <br />
+                  2.ขนาดไฟล์ไม่เกิน 10MB และความละเอียดไม่เกิน 1024*1024 พิกเซล
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* content2 */}

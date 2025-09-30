@@ -19,22 +19,44 @@ body {
 }
 
 .content {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;                /* spacing between panels */
-  background-image: url('./img/pastel_background_corn.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 87%;
-  max-height: 87%;
-  overflow-y: auto;
-  position: relative;
-  padding: 12px;            /* breathing room on small screens */
+  display: flex
+;
+    align-items: center;
+    gap: 24px;
+    background-image: url(/corn_learning_apps/src/img/pastel_background_corn.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 87%;
+    max-height: 87%;
+    overflow-y: auto;
+    position: relative;
+    padding: 24px;
+    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/* กล่อง content0 */
+.content0 {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.7); /* โปร่งใส */
+  border-radius: 20px;
+  padding: 20px;
+  min-height: 400px;
   box-sizing: border-box;
 }
+
+/* กล่อง content1 */
+.content1 {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.7); /* โปร่งใส */
+  border-radius: 20px;
+  padding: 20px;
+  min-height: 400px;
+  box-sizing: border-box;
+}
+
 
 /* prevent cards from collapsing to zero width/height on tight layouts */
 .content > .content1,
@@ -111,6 +133,10 @@ body {
     align-items: center;
     justify-content: flex-start;
   }
+
+  /* ✅ จัดลำดับ */
+  .content0 { order: 1; width: 100%; margin-bottom: 12px; }
+  .content1 { order: 2; width: 100%; }
 }
 
 /* very small phones (e.g., 375×667) */
@@ -124,4 +150,10 @@ body {
   .content {
     align-items: center;
   }
+
+  /* ✅ ให้ชัดขึ้นสำหรับจอเล็กมาก */
+  .content0, .content1 {
+    width: 95%;   /* ลดให้พอดีขอบจอ */
+  }
 }
+
